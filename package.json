@@ -1,7 +1,7 @@
 {
-  "name": "2dgamegpt",
+  "name": "2d-gamecreator-gpt",
   "version": "1.0.0",
-  "description": "JavaScript Canvas2D | 100% Prompt Driven Development (GPT) ",
+  "description": "Create 2D games in JavaScript using Prompt Driven Development",
   "keywords": [
     "ai",
     "artificial intelligence",

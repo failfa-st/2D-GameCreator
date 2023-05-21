@@ -352,7 +352,7 @@ export default function Home() {
 										<ExampleButton
 											title="Flappy Bird"
 											text={
-												"Flappy Bird. Intro screen, start the game by pressing space key. Bird starts flying on the left center of the screen. Gradually falls slowly. Pressing the space key over and over lets the bird fly higher. Pipes move from the right of the screen to the left. Collision detection when the bird hits the ground or a pipe. When collision detected, then show intro screen. Player gets a point for each passed pipe without an collision. Score is shown in the top left while bird is flying. High score on intro screen."
+												"Flappy Bird. Intro screen, start the game by pressing space key. Bird starts flying on the left center of the screen. Gradually falls slowly. Pressing the space key over and over lets the bird fly higher. Pipes move from the right of the screen to the left. The pipes have a huge opening so that the bird can easily fly through. Collision detection when the bird hits the ground or a pipe. When collision detected, then show intro screen. Player gets a point for each passed pipe without an collision. Score is shown in the top left while bird is flying. High score on intro screen."
 											}
 											onClick={setPrompt}
 										/>

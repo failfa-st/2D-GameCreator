@@ -1,12 +1,8 @@
-<h1 align="center"><big>fail4</big></h1>
+<h1 align="center"><big>2DGameGPT</big></h1>
 
 <p align="center"><img src="assets/logo.png" alt="logo" width="200"/></p>
 
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
-
-> This project is built to fail  
-> (until it doesn't)  
-> Restart until it works
 
 # Prompt-Driven WebUI for Creative Development
 

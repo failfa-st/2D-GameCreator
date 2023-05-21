@@ -1,5 +1,6 @@
 import GPT3Tokenizer from "gpt3-tokenizer";
 import prettier from "prettier";
+import parserBabel from "prettier/parser-babel";
 
 export const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
 
@@ -9,8 +10,13 @@ export function getTokens(text: string) {
 
 export function prettify(code: string) {
 	try {
-		return prettier.format(code, { useTabs: true, semi: true, parser: "babel" });
-	} catch {
+		return prettier.format(code, {
+			useTabs: true,
+			semi: true,
+			parser: "babel",
+			plugins: [parserBabel],
+		});
+	} catch (error) {
 		return code;
 	}
 }
@@ -24,5 +30,3 @@ export function getTheme(mode: string | undefined, systemMode: string | undefine
 	}
 	return undefined;
 }
-export { extractCode } from "@/utils/prompt";
-export { miniPrompt } from "@/utils/prompt";

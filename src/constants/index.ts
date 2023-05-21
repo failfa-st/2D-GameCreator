@@ -1,26 +1,16 @@
 export const base = {
-	default: `/** CHANGELOG
- * v1.0.0. Set up canvas
- */
-const canvas = document.querySelector('canvas');
+	default: `const canvas = document.querySelector('canvas');
+canvas.style.backgroundColor = '#fff';
 const ctx = canvas.getContext('2d');
-/**
- * Always use this random function
- */
-function random() {
-	return Math.random()
-}
-/**
- * The draw function is called every frame to update the canvas.
- * To change the drawing logic, modify the code inside this function.
- */
+
 function draw(){
-	// TODO: Add drawing logic here
-	// Set the desired FPS (frames per second) for the animation
 	const FPS = 60;
-	// Schedule the next frame to be drawn
+
+	// TODO: Add drawing logic here
+	
+	// NEVER stop the loop
 	setTimeout(requestAnimationFrame(draw),1000/FPS)
 }
 draw();
-	`.trim(),
+    `.trim(),
 };

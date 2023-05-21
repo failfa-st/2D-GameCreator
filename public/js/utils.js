@@ -52,12 +52,12 @@ function handleTemplate(template) {
 	Function("Template", `${template};`)();
 }
 
-subscribe("fail4", event => {
+subscribe("2DGameGPT", event => {
 	const { action } = event.data;
 	switch (action.type) {
 		case "call":
 			host.current = event.source;
-			answer(event.source, "fail4");
+			answer(event.source, "2DGameGPT");
 			handleTemplate(action.payload.template);
 			break;
 		case "broadcast":

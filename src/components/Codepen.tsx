@@ -1,0 +1,28 @@
+import IconButton from "@mui/material/IconButton";
+import { wrappers } from "@/utils/share";
+import Tooltip from "@mui/material/Tooltip";
+import { CodepenIcon } from "@/components/CodepenIcon";
+import { ShareProps } from "../pages";
+
+export function Codepen({ title, content }: ShareProps) {
+	return (
+		<form action="https://codepen.io/pen/define" method="POST" target="_blank">
+			<input
+				type="hidden"
+				name="data"
+				value={JSON.stringify({
+					title,
+					js: wrappers.js(content),
+					html: wrappers.miniHtml(title),
+					css: wrappers.css(),
+				})}
+			/>
+
+			<Tooltip title="Open in Codepen">
+				<IconButton color="primary" type="submit" aria-label="Codepen">
+					<CodepenIcon />
+				</IconButton>
+			</Tooltip>
+		</form>
+	);
+}

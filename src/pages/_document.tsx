@@ -9,7 +9,7 @@ import Document, {
 } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import { AppType } from "next/app";
-import { roboto } from "@/lib/theme";
+import { poppins } from "@/lib/theme";
 import createEmotionCache from "@/lib/createEmotionCache";
 import { MyAppProps } from "./_app";
 import { getInitColorSchemeScript } from "@mui/material/styles";
@@ -20,7 +20,7 @@ interface MyDocumentProps extends DocumentProps {
 
 export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
 	return (
-		<Html lang="en" className={roboto.className}>
+		<Html lang="en" className={poppins.className}>
 			<Head>
 				<link rel="shortcut icon" href="/favicon.ico" />
 				<meta name="emotion-insertion-point" content="" />

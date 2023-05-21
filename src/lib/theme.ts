@@ -1,14 +1,13 @@
-import { Fira_Code, Roboto } from "next/font/google";
+import { Fira_Code, Poppins } from "next/font/google";
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 
-export const roboto = Roboto({
+export const poppins = Poppins({
 	weight: ["300", "400", "500", "700"],
 	subsets: ["latin"],
 	display: "swap",
 	fallback: ["Helvetica", "Arial", "sans-serif"],
 });
 
-// Create a theme instance.
 const theme = extendTheme({
 	colorSchemes: {
 		light: {
@@ -33,7 +32,31 @@ const theme = extendTheme({
 		},
 	},
 	typography: {
-		...roboto.style,
+		...poppins.style,
+		h1: {
+			fontSize: "3em",
+			marginBottom: 24,
+		},
+		h2: {
+			fontSize: "1.9em",
+			marginBottom: 12,
+		},
+		h3: {
+			fontSize: "1.7em",
+			marginBottom: 12,
+		},
+		h4: {
+			fontSize: "1.25em",
+			marginBottom: 12,
+		},
+		h5: {
+			fontSize: "1em",
+			marginBottom: 12,
+		},
+		h6: {
+			fontSize: "0.8em",
+			marginBottom: 12,
+		},
 	},
 });
 

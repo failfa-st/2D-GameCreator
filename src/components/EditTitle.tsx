@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
-import { roboto } from "@/lib/theme";
+import { poppins } from "@/lib/theme";
 import IconButton from "@mui/material/IconButton";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -24,7 +24,7 @@ export function EditTitle({ value, onSave }: { value: string; onSave(value: stri
 					sx={{
 						width: "100%",
 						fontSize: 16,
-						input: { ...roboto.style, p: 0, lineHeight: 1.5 },
+						input: { ...poppins.style, p: 0, lineHeight: 1.5 },
 					}}
 					onChange={event => {
 						setText(event.target.value);

@@ -1,5 +1,5 @@
 {
-  "name": "fail4",
+  "name": "2dgamegpt",
   "version": "1.0.0",
   "description": "JavaScript Canvas2D | 100% Prompt Driven Development (GPT) ",
   "keywords": [
@@ -16,6 +16,12 @@
     "name": "Gregor Adams",
     "url": "https://github.com/pixelass/"
   },
+  "contributors": [
+    {
+      "name": "Tim Pietrusky",
+      "url": "https://github.com/TimPietrusky"
+    }
+  ],
   "scripts": {
     "dev": "next dev",
     "prepare": "husky install",
@@ -46,8 +52,10 @@
     "@monaco-editor/react": "4.5.0",
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.12.0",
+    "@tweenjs/tween.js": "^18.6.4",
     "@types/prettier": "^2.7.2",
     "axios": "1.3.5",
+    "codesandbox": "2.2.3",
     "esdeka": "0.1.18",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",

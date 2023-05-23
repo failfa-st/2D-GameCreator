@@ -4,7 +4,21 @@
 
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
 
-# Prompt-Driven WebUI for Creative Development
+---
+
+<!-- toc -->
+
+- [Prompt-Driven WebUI for 2D Game Development](#prompt-driven-webui-for-2d-game-development)
+  * [Features](#features)
+  * [Getting Started](#getting-started)
+    + [On 🤗 Spaces](#on-%F0%9F%A4%97-spaces)
+    + [On your computer](#on-your-computer)
+
+<!-- tocstop -->
+
+---
+
+# Prompt-Driven WebUI for 2D Game Development
 
 Discover a web-based user interface designed for prompt-driven development, enabling users to create
 a wide array of digital art including games, visual effects, fractal art, and flow fields. This
@@ -27,7 +41,16 @@ imagination with the Prompt-Driven WebUI for creative 2D game development.
 
 ## Getting Started
 
-To get started with the Prompt-Driven WebUI for 2D Game Development, follow these steps:
+To get started with the Prompt-Driven WebUI for 2D Game Development, you have two choices: Use the
+hosted demo on 🤗 Spaces or run it directly on your computer.
+
+### On 🤗 Spaces
+
+The **2D GameCreator-GPT** is hosted on Hugging Face Spaces.
+
+### On your computer
+
+If you want to run the UI locally, please follow these steps!
 
 1. Clone the repository to your local machine.
 2. Copy the `.env.local.example` file to a new file named `.env.local` and add your `OPENAI_API_KEY`
@@ -35,5 +58,3 @@ To get started with the Prompt-Driven WebUI for 2D Game Development, follow thes
 3. Install the required dependencies using `npm install`.
 4. Run the development server with `npm run dev` to access the WebUI.
 5. Begin creating your own 2D games in JavaScript
-
-Happy creating!

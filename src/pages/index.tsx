@@ -46,7 +46,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { useColorScheme } from "@mui/material/styles";
 import { getTheme, prettify } from "@/utils";
 import { answersAtom, showCodeAtom } from "@/store/atoms";
-import { base } from "@/constants";
+import {
+	COMMAND_ADD_FEATURE,
+	COMMAND_CREATE_GAME,
+	COMMAND_EXTEND_FEATURE,
+	COMMAND_FIX_BUG,
+	COMMAND_REMOVE_FEATURE,
+	base,
+} from "@/constants";
 import { EditTitle } from "@/components/EditTitle";
 import Link from "next/link";
 import { fontMono } from "@/lib/theme";
@@ -239,7 +246,7 @@ export default function Home() {
 						<Box
 							component="form"
 							id="gpt-form"
-							sx={{ p: 1 }}
+							sx={{ p: 1, pt: 0 }}
 							onSubmit={async event => {
 								event.preventDefault();
 								const formData = new FormData(event.target as HTMLFormElement);
@@ -289,22 +296,24 @@ export default function Home() {
 													labelId="gpt-command-select-label"
 													id="gpt-command-select"
 													name="command"
-													defaultValue="CREATE_GAME"
+													defaultValue={COMMAND_CREATE_GAME}
 													label="Command"
 												>
-													<MenuItem value="CREATE_GAME">
+													<MenuItem value={COMMAND_CREATE_GAME}>
 														create game
 													</MenuItem>
-													<MenuItem value="ADD_FEATURE">
+													<MenuItem value={COMMAND_ADD_FEATURE}>
 														add feature
 													</MenuItem>
-													<MenuItem value="REMOVE_FEATURE">
+													<MenuItem value={COMMAND_REMOVE_FEATURE}>
 														remove feature
 													</MenuItem>
-													<MenuItem value="UPDATE_FEATURE">
+													<MenuItem value={COMMAND_EXTEND_FEATURE}>
 														update feature
 													</MenuItem>
-													<MenuItem value="FIX_BUG">fix bug</MenuItem>
+													<MenuItem value={COMMAND_FIX_BUG}>
+														fix bug
+													</MenuItem>
 												</Select>
 											</FormControl>
 
@@ -356,6 +365,17 @@ export default function Home() {
 											}
 											onClick={setPrompt}
 										/>
+
+										<ExampleButton
+											title="Asteroids"
+											text={
+												"Asteroids. Control spaceship-movement using arrow keys. Fire bullets with space key to destroy asteroids, breaking them into smaller pieces. Earn points for destroying asteroids, with higher scores for smaller ones. Collision detection when spaceship hits asteroid, collision reduces spaceship health, game over when health is 0."
+											}
+											// text={
+											// 	"Asteroids. Space ship can fly around in space using the arrow keys. Irregular shaped objects called asteroids flying around the space ship. The space ship can shoot bullets using the space key. When a bullet hits an asteroid, it splits in smaller irregular shaped objects; when asteroid is completely destroyed, the player scores one point. When the space ship collides with an asteroid, it looses 1 health; when the health is 0, the game is over. Restart the game via pressing space key."
+											// }
+											onClick={setPrompt}
+										/>
 									</Stack>
 								</Stack>
 							</Paper>
@@ -383,18 +403,6 @@ export default function Home() {
 												name="openAPIKey"
 												label="OpenAI API Key"
 												minRows={1}
-												InputProps={{
-													style: fontMono.style,
-												}}
-											/>
-											<TextField
-												multiline
-												fullWidth
-												id="negativePrompt"
-												name="negativePrompt"
-												label="Negative Prompt"
-												placeholder="images, audio files"
-												maxRows={6}
 												InputProps={{
 													style: fontMono.style,
 												}}
@@ -453,7 +461,7 @@ export default function Home() {
 												id="maxTokens"
 												name="maxTokens"
 												min={1024}
-												max={8000}
+												max={4096}
 												defaultValue={2048}
 												step={256}
 												valueLabelDisplay="auto"

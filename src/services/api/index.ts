@@ -2,17 +2,22 @@ import { ChatCompletionRequestMessage } from "openai";
 import { nanoid } from "nanoid";
 import { openai } from "@/services/api/openai";
 import { extractCode, miniPrompt } from "@/utils/prompt";
+import {
+	COMMAND_ADD_FEATURE,
+	COMMAND_CREATE_GAME,
+	COMMAND_EXTEND_FEATURE,
+	COMMAND_FIX_BUG,
+	COMMAND_REMOVE_FEATURE,
+} from "@/constants";
 
 export async function toOpenAI({
 	command = "CREATE_GAME",
 	prompt = "extend the code",
-	negativePrompt = "",
 	temperature = "0.2",
 	template = "",
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
 }) {
-	const negativePrompt_ = negativePrompt.trim();
 	const prompt_ = prompt.trim();
 
 	const nextMessage: ChatCompletionRequestMessage = {
@@ -26,47 +31,37 @@ export async function toOpenAI({
 			`,
 	};
 
-	const task = `${prompt_}${negativePrompt_ ? ` | not(${negativePrompt_})` : ""}`;
+	const task = `${prompt_}`;
+
+	const messages: ChatCompletionRequestMessage[] = [
+		{
+			role: "system",
+			content: miniPrompt`
+			You are a skilled 2D game developer working with JavaScript on Canvas2D and aim for high performance
+			You understand and follow a set of "COMMANDS" to build games:
+
+			"${COMMAND_CREATE_GAME}": Initiate the development. Consider the game type, environment, basic mechanics and extend the "TEMPLATE"
+			"${COMMAND_ADD_FEATURE}": Add the new feature
+			"${COMMAND_REMOVE_FEATURE}": Remove the existing feature
+			"${COMMAND_EXTEND_FEATURE}": Modify an existing feature, altering its behavior or properties
+			"${COMMAND_FIX_BUG}": Debug and fix problems, ensuring everything functions as intended
+
+			NEVER use any external assets: image, base64, sprite or audio
+			You can use these libraries without importing them: TWEEN, Mousetrap
+			NEVER use alert! Write your message on Canvas directly
+			Your "OUTPUT FORMAT" must be valid JavaScript code within a markdown code block
+			It's crucial to follow these "COMMANDS" and "OUTPUT FORMAT" for the desired results
+			`,
+		},
+		nextMessage,
+	];
 
 	try {
 		const response = await openai.createChatCompletion({
 			model,
+			messages,
 			max_tokens: Number.parseInt(maxTokens),
 			temperature: Number.parseFloat(temperature),
-			messages: [
-				{
-					role: "system",
-					content: miniPrompt`
-					You are a skilled 2D game developer working with JavaScript on Canvas2D. 
-					You understand and follow a set of "COMMANDS" to build and modify games. 
-
-					- "CREATE_GAME": You initiate the development of a game. You consider the game type, environment, basic mechanics and extend the "TEMPLATE".
-					- "ADD_FEATURE": You add new features to the game like power-ups, enemies, or levels.
-					- "REMOVE_FEATURE": You can remove any existing feature from the game.
-					- "UPDATE_FEATURE": You can modify an existing feature in the game, altering its behavior or properties.
-					- "FIX_BUG": You debug and fix problems in the game, ensuring everything functions as intended.
-					
-					You NEVER use any (external) assets: image, base64, sprite or audio. 
-					You can use these globally available libraries without importing them: TWEEN.
-					Never use alert! Write your message on Canvas directly.
-					You aim for high performance.
-					Your "OUTPUT FORMAT" must be valid JavaScript code within a markdown code block.
-					It's crucial to follow these "COMMANDS" and "OUTPUT FORMAT" for the desired results.
-					`,
-					// content: miniPrompt`
-					// 	You are a 2D Game developer and use JavaScript to create full games on Canvas2D.
-					// 	You can choose to add highscore, levels, player life, power ups, enemies.
-					// 	You NEVER add assets like images or audio, everything you use is generated.
-					// 	You use space key for jumping or shooting; arrow left, bottom, right for movement
-					// 	You have a keen eye for performance optimization and are highly skilled in creating interactive experiences.
-					// 	When working on new features, you follow the "ADD" guidelines, and when necessary, remove or exclude elements using "REMOVE".
-					// 	You also pay close attention to "TEMPLATE" code, extending or fixing it as needed.
-					// 	Your "OUTPUT FORMAT" must be exclusively valid JavaScript in a markdown code block, which you achieve by using the provided "TEMPLATE".
-					// 	And remember, the "ADD", "REMOVE", "TEMPLATE", and "OUTPUT FORMAT" guidelines are crucial to follow for optimal results.
-					// `,
-				},
-				nextMessage,
-			],
 		});
 
 		const { message } = response.data.choices[0];

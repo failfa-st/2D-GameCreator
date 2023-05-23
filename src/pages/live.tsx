@@ -1,5 +1,6 @@
 import Script from "next/script";
 import TWEEN from "@tweenjs/tween.js";
+import Mousetrap from "mousetrap";
 
 const styles = (
 	<style>

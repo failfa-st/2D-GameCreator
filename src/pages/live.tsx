@@ -1,6 +1,8 @@
 import Script from "next/script";
-import TWEEN from "@tweenjs/tween.js";
 import Mousetrap from "mousetrap";
+import confetti from "canvas-confetti";
+
+import { useEffect } from "react";
 
 const styles = (
 	<style>
@@ -23,6 +25,11 @@ const styles = (
 	</style>
 );
 export default function Page() {
+	useEffect(() => {
+		window.Mousetrap = Mousetrap;
+		window.confetti = confetti;
+	}, []);
+
 	return (
 		<>
 			{styles}

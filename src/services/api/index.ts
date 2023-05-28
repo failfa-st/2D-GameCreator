@@ -1,14 +1,8 @@
 import { ChatCompletionRequestMessage } from "openai";
 import { nanoid } from "nanoid";
-import { openai } from "@/services/api/openai";
+import { createClient, openai } from "@/services/api/openai";
 import { extractCode, miniPrompt } from "@/utils/prompt";
-import {
-	COMMAND_ADD_FEATURE,
-	COMMAND_CREATE_GAME,
-	COMMAND_EXTEND_FEATURE,
-	COMMAND_FIX_BUG,
-	COMMAND_REMOVE_FEATURE,
-} from "@/constants";
+import { systemMessage } from "@/constants";
 
 export async function toOpenAI({
 	command = "CREATE_GAME",
@@ -17,8 +11,15 @@ export async function toOpenAI({
 	template = "",
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
+	openAIAPIKey = "",
 }) {
 	const prompt_ = prompt.trim();
+
+	let client = openai;
+
+	if (openAIAPIKey !== "") {
+		client = createClient(openAIAPIKey);
+	}
 
 	const nextMessage: ChatCompletionRequestMessage = {
 		role: "user",
@@ -36,28 +37,13 @@ export async function toOpenAI({
 	const messages: ChatCompletionRequestMessage[] = [
 		{
 			role: "system",
-			content: miniPrompt`
-			You are a skilled 2D game developer working with JavaScript on Canvas2D and aim for high performance
-			You understand and follow a set of "COMMANDS" to build games:
-
-			"${COMMAND_CREATE_GAME}": Initiate the development. Consider the game type, environment, basic mechanics and extend the "TEMPLATE"
-			"${COMMAND_ADD_FEATURE}": Add the new feature
-			"${COMMAND_REMOVE_FEATURE}": Remove the existing feature
-			"${COMMAND_EXTEND_FEATURE}": Modify an existing feature, altering its behavior or properties
-			"${COMMAND_FIX_BUG}": Debug and fix problems, ensuring everything functions as intended
-
-			NEVER use any external assets: image, base64, sprite or audio
-			You can use these libraries without importing them: TWEEN, Mousetrap
-			NEVER use alert! Write your message on Canvas directly
-			Your "OUTPUT FORMAT" must be valid JavaScript code within a markdown code block
-			It's crucial to follow these "COMMANDS" and "OUTPUT FORMAT" for the desired results
-			`,
+			content: miniPrompt`${systemMessage}`,
 		},
 		nextMessage,
 	];
 
 	try {
-		const response = await openai.createChatCompletion({
+		const response = await client.createChatCompletion({
 			model,
 			messages,
 			max_tokens: Number.parseInt(maxTokens),

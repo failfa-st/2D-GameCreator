@@ -1,6 +1,14 @@
+---
+title: 2D GameCreator-GPT
+emoji: "\U0001F47E\U0001F579\U0001F4FA"
+colorFrom: purple
+colorTo: red
+sdk: docker
+pinned: false
+license: agpl-3.0
+app_port: 3000
+---
 <h1 align="center"><big>2D GameCreator-GPT</big></h1>
-
-<p align="center"><img src="assets/logo.png" alt="logo" width="200"/></p>
 
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
 
@@ -46,7 +54,7 @@ hosted demo on 🤗 Spaces or run it directly on your computer.
 
 ### On 🤗 Spaces
 
-The **2D GameCreator-GPT** is hosted on Hugging Face Spaces.
+[The **2D GameCreator-GPT** is hosted on Hugging Face Spaces](https://huggingface.co/spaces/failfast/2D-GameCreator-GPT/)
 
 ### On your computer
 
@@ -58,3 +66,4 @@ If you want to run the UI locally, please follow these steps!
 3. Install the required dependencies using `npm install`.
 4. Run the development server with `npm run dev` to access the WebUI.
 5. Begin creating your own 2D games in JavaScript
+

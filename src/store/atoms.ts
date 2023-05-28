@@ -1,6 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 
-import { base } from "@/constants";
+import { baseGame } from "@/constants/baseGame";
 
 export const answersAtom = atomWithStorage<
 	{
@@ -11,7 +11,7 @@ export const answersAtom = atomWithStorage<
 >("2DGameGPT", [
 	{
 		id: "1",
-		content: base.default,
+		content: baseGame.default,
 		task: "Base Game",
 	},
 ]);

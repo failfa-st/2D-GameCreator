@@ -1,5 +1,5 @@
 import { Fira_Code, Poppins } from "next/font/google";
-import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
+import { experimental_extendTheme as extendTheme, Theme } from "@mui/material/styles";
 
 export const poppins = Poppins({
 	weight: ["300", "400", "500", "700"],
@@ -13,20 +13,23 @@ const theme = extendTheme({
 		light: {
 			palette: {
 				primary: {
-					main: "#40088d",
+					main: "#2c90fc",
 				},
 				secondary: {
-					main: "#038225",
+					main: "#b827fc",
 				},
 			},
 		},
 		dark: {
 			palette: {
 				primary: {
-					main: "#00d720",
+					main: "#2c90fc",
 				},
 				secondary: {
-					main: "#cc06ed",
+					main: "#b827fc",
+				},
+				text: {
+					secondary: "#ffffff",
 				},
 			},
 		},
@@ -34,28 +37,26 @@ const theme = extendTheme({
 	typography: {
 		...poppins.style,
 		h1: {
-			fontSize: "3em",
-			marginBottom: 24,
+			fontSize: "5em",
 		},
-		h2: {
-			fontSize: "1.9em",
-			marginBottom: 12,
+	},
+	components: {
+		MuiLink: {
+			styleOverrides: {
+				root: {
+					textDecoration: "none",
+					":hover": {
+						textDecoration: "underline",
+					},
+				},
+			},
 		},
-		h3: {
-			fontSize: "1.7em",
-			marginBottom: 12,
-		},
-		h4: {
-			fontSize: "1.25em",
-			marginBottom: 12,
-		},
-		h5: {
-			fontSize: "1em",
-			marginBottom: 12,
-		},
-		h6: {
-			fontSize: "0.8em",
-			marginBottom: 12,
+		MuiListSubheader: {
+			styleOverrides: {
+				root: {
+					fontSize: "1.35rem",
+				},
+			},
 		},
 	},
 });

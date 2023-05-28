@@ -73,11 +73,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.43.9",
-    "react-syntax-highlighter": "15.5.0",
-    "zustand": "4.3.7"
+    "react-syntax-highlighter": "15.5.0"
   },
   "devDependencies": {
-    "@semantic-release/git": "^10.0.1",
     "@types/canvas-confetti": "^1.6.0",
     "@types/mousetrap": "^1.6.11",
     "@types/node": "18.15.11",

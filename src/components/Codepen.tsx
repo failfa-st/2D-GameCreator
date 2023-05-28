@@ -2,7 +2,7 @@ import IconButton from "@mui/material/IconButton";
 import { wrappers } from "@/utils/share";
 import Tooltip from "@mui/material/Tooltip";
 import { CodepenIcon } from "@/components/CodepenIcon";
-import { ShareProps } from "../pages";
+import { ShareProps } from "@/components/GameCreator";
 import { prettify } from "@/utils";
 
 export function Codepen({ title, content }: ShareProps) {

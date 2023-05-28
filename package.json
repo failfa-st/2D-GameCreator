@@ -23,6 +23,7 @@
     }
   ],
   "scripts": {
+    "build": "next build",
     "dev": "next dev",
     "prepare": "husky install",
     "spj": "npx sort-package-json",

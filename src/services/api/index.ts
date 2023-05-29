@@ -1,6 +1,5 @@
 import { ChatCompletionRequestMessage } from "openai";
 import { nanoid } from "nanoid";
-import { createClient, openai } from "@/services/api/openai";
 import { extractCode, miniPrompt } from "@/utils/prompt";
 import { systemMessage } from "@/constants";
 
@@ -11,15 +10,13 @@ export async function toOpenAI({
 	template = "",
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
-	openAIAPIKey = "",
+	client = null,
 }) {
-	const prompt_ = prompt.trim();
-
-	let client = openai;
-
-	if (openAIAPIKey !== "") {
-		client = createClient(openAIAPIKey);
+	if (client === null) {
+		throw new Error("OpenAI client is not defined");
 	}
+
+	const prompt_ = prompt.trim();
 
 	const nextMessage: ChatCompletionRequestMessage = {
 		role: "user",
@@ -53,8 +50,6 @@ export async function toOpenAI({
 		const { message } = response.data.choices[0];
 
 		if (message) {
-			console.log("ORIGINAL OUTPUT");
-			console.log(message.content);
 			return {
 				...message,
 				content: extractCode(message.content).replace(

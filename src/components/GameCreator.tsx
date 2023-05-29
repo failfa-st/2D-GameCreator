@@ -76,6 +76,8 @@ import { RunCircle } from "@mui/icons-material";
 import Introduction from "@/components/Introduction";
 import Instructions from "@/components/Instructions";
 import Examples from "@/components/Examples";
+import { toOpenAI } from "@/services/api";
+import { createClient } from "@/services/api/openai";
 const MonacoEditor = dynamic(import("@monaco-editor/react"), { ssr: false });
 
 export interface ShareProps {
@@ -276,11 +278,15 @@ export default function GameCreator() {
 									const formObject = Object.fromEntries(formData);
 									try {
 										setLoading(true);
-										const { data } = await axios.post(
-											"/api/generate",
-											formObject
+
+										const client = createClient(
+											formObject.openAIAPIKey as string
 										);
-										const answer = data;
+										const answer = await toOpenAI({
+											...formObject,
+											client,
+										});
+
 										setAnswers(previousAnswers => [answer, ...previousAnswers]);
 										setRunningId(answer.id);
 										setActiveId(answer.id);
@@ -296,11 +302,7 @@ export default function GameCreator() {
 								}}
 							>
 								<Stack sx={{ p: 1, pl: 0, gap: 2 }}>
-									<Secret
-										label="OpenAI API Key"
-										name="openAIAPIKey"
-										required={process.env.NODE_ENV === "production"}
-									/>
+									<Secret label="OpenAI API Key" name="openAIAPIKey" />
 
 									<Stack direction="row" spacing={1}>
 										<TextField

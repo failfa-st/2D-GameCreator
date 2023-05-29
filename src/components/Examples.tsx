@@ -25,7 +25,7 @@ export default function Examples() {
 
 			<SectionBox>
 				<Typography component="h3" variant="h2">
-					Examples
+					Example Games
 				</Typography>
 			</SectionBox>
 

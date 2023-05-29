@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function Secret(props: TextFieldProps) {
-	const { name = "secret", label = "Secret", required = false } = props;
+	const { name = "secret", label = "Secret", required = true } = props;
 	const [showSecret, setShowSecret] = useState(false);
 
 	const handleShowSecret = () => setShowSecret(!showSecret);
@@ -14,7 +14,7 @@ export default function Secret(props: TextFieldProps) {
 			label={label}
 			name={name}
 			type={showSecret ? "text" : "password"}
-			required
+			required={required}
 			InputProps={{
 				endAdornment: (
 					<InputAdornment position="end">

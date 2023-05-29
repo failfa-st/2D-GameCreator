@@ -1,7 +1,17 @@
-import { ChatCompletionRequestMessage } from "openai";
+import { ChatCompletionRequestMessage, OpenAIApi } from "openai";
 import { nanoid } from "nanoid";
 import { extractCode, miniPrompt } from "@/utils/prompt";
 import { systemMessage } from "@/constants";
+
+interface ToOpenAIProps {
+	command: string;
+	prompt: string;
+	temperature: string;
+	template: string;
+	model: string;
+	maxTokens: string;
+	client: OpenAIApi | null;
+}
 
 export async function toOpenAI({
 	command = "CREATE_GAME",
@@ -11,7 +21,7 @@ export async function toOpenAI({
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
 	client = null,
-}) {
+}: ToOpenAIProps) {
 	if (client === null) {
 		throw new Error("OpenAI client is not defined");
 	}

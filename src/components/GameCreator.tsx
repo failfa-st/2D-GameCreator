@@ -279,11 +279,25 @@ export default function GameCreator() {
 									try {
 										setLoading(true);
 
+										const {
+											command,
+											prompt,
+											temperature,
+											template,
+											model,
+											maxTokens,
+										} = formObject;
+
 										const client = createClient(
 											formObject.openAIAPIKey as string
 										);
 										const answer = await toOpenAI({
-											...formObject,
+											command: command as string,
+											prompt: prompt as string,
+											temperature: temperature as string,
+											template: template as string,
+											model: model as string,
+											maxTokens: maxTokens as string,
 											client,
 										});
 
@@ -376,6 +390,7 @@ export default function GameCreator() {
 													Run
 												</Typography>
 											</Button>
+											<Box sx={{ flex: 1 }} />
 										</Stack>
 									</Stack>
 

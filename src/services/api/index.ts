@@ -11,6 +11,7 @@ interface ToOpenAIProps {
 	model: string;
 	maxTokens: string;
 	client: OpenAIApi | null;
+	signal?: AbortSignal;
 }
 
 export async function toOpenAI({
@@ -21,6 +22,7 @@ export async function toOpenAI({
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
 	client = null,
+	signal,
 }: ToOpenAIProps) {
 	if (client === null) {
 		throw new Error("OpenAI client is not defined");
@@ -50,12 +52,15 @@ export async function toOpenAI({
 	];
 
 	try {
-		const response = await client.createChatCompletion({
-			model,
-			messages,
-			max_tokens: Number.parseInt(maxTokens),
-			temperature: Number.parseFloat(temperature),
-		});
+		const response = await client.createChatCompletion(
+			{
+				model,
+				messages,
+				max_tokens: Number.parseInt(maxTokens),
+				temperature: Number.parseFloat(temperature),
+			},
+			{ signal }
+		);
 
 		const { message } = response.data.choices[0];
 

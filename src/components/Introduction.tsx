@@ -9,42 +9,48 @@ import {
 	ListItemIcon,
 	ListItemText,
 	Link,
+	Button,
 } from "@mui/material";
 import KeyIcon from "@mui/icons-material/Key";
 import SmartButtonIcon from "@mui/icons-material/SmartButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { PlayArrow } from "@mui/icons-material";
 
 export default function Introduction() {
 	return (
 		<Stack direction="row" spacing={2}>
 			<Grid container gap={2} sx={{ justifyContent: "center" }}>
 				<Grid item md={4}>
-					<Typography sx={{ mb: 1 }}>
-						Your job is to provide a prompt that describes the game you want, so that
-						your skilled 2D Game Developer can built it for you using JavaScript on
-						Canvas2D.
-					</Typography>
+					<Stack spacing={2}>
+						<Typography>
+							You provide a prompt that describes the game you want, so that your
+							skilled 2D Game Developer can built it for you. The game runs directly
+							in your browser (thanks to JavaScript on Canvas2D).
+						</Typography>
 
-					<Typography>
-						We would love to use open-source models for this (for example{" "}
-						<Link
-							href="https://huggingface.co/HuggingFaceH4/starchat-alpha"
-							target="_blank"
-							rel="noopener"
-						>
-							starchat-alpha
-						</Link>
-						), but running a private Inference Endpoint is too expensive for us. If you
-						would love to help us, then{" "}
-						<Link
-							href="https://discord.com/invite/m3TBB9XEkb"
-							target="_blank"
-							rel="noopener"
-						>
-							let&apos;s talk
-						</Link>
-						!
-					</Typography>
+						<Typography>
+							You are stuck?{" "}
+							<Link
+								href="https://huggingface.co/spaces/failfast/2D-GameCreator-GPT/discussions"
+								target="_blank"
+								rel="noopener"
+							>
+								We are here to help!
+							</Link>
+						</Typography>
+
+						<Typography>
+							We are looking into integrating open-source models (for example{" "}
+							<Link
+								href="https://huggingface.co/HuggingFaceH4/starchat-alpha"
+								target="_blank"
+								rel="noopener"
+							>
+								starchat-alpha
+							</Link>
+							) next, so stay tuned!
+						</Typography>
+					</Stack>
 				</Grid>
 				<Grid item md={4}>
 					<Paper>
@@ -71,7 +77,7 @@ export default function Introduction() {
 									<SmartButtonIcon />
 								</ListItemIcon>
 								<ListItemText>
-									Select one of the <b>examples</b>
+									Select one of the <b>Examples</b>
 								</ListItemText>
 							</ListItem>
 							<ListItem>
@@ -79,7 +85,11 @@ export default function Introduction() {
 									<PlayArrowIcon />
 								</ListItemIcon>
 								<ListItemText>
-									Click on <b>Run</b>
+									Click on &nbsp;
+									<Button variant="contained" startIcon={<PlayArrow />}>
+										<Typography sx={{ fontWeight: "500" }}>Run</Typography>
+									</Button>
+									&nbsp;
 								</ListItemText>
 							</ListItem>
 						</List>

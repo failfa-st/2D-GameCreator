@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { DividerBox, SectionBox } from "./base/boxes";
 import { DynamicFeed, PrecisionManufacturing } from "@mui/icons-material";
+import theme from "@/lib/theme";
 
 export default function Examples() {
 	return (
@@ -27,12 +28,38 @@ export default function Examples() {
 				<Typography component="h3" variant="h2">
 					Example Games
 				</Typography>
+				<Typography variant="body1">
+					We re-created some of our favorite games! You want to share your game with the
+					community? Then head over to our{" "}
+					<Link
+						href="https://discord.com/invite/m3TBB9XEkb"
+						target="_blank"
+						rel="noopener"
+						sx={{ verticalAlign: "bottom" }}
+					>
+						<img
+							style={{ verticalAlign: "bottom" }}
+							src="https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge"
+						/>
+					</Link>
+					, post it in #showcase and we might add it to this section as well!
+				</Typography>
 			</SectionBox>
 
 			<Grid container>
 				<Grid item sm={4}>
 					<Card>
-						<CardHeader title="Space Invaders Extreme"></CardHeader>
+						<CardHeader
+							title="Space Invaders Extreme"
+							subheader={
+								<>
+									by{" "}
+									<Link href="https://nerddis.co" target="_blank" rel="noopener">
+										NERDDISCO
+									</Link>
+								</>
+							}
+						></CardHeader>
 						<CardMedia
 							component="img"
 							image="img/space_invaders_extreme.jpg"
@@ -50,7 +77,7 @@ export default function Examples() {
 												target="_blank"
 												rel="noopener"
 											>
-												via Codesandbox
+												on CodeSandbox
 											</Link>
 										</TableCell>
 									</TableRow>

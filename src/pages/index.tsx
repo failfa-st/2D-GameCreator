@@ -4,10 +4,11 @@ import { Container } from "@mui/material";
 import Footer from "@/components/footer";
 import Title from "@/components/title";
 import Introduction from "@/components/Introduction";
-import Instructions from "@/components/Instructions";
+import UnderTheHood from "@/components/UnderTheHood";
 import Examples from "@/components/Examples";
 import GameCreator from "@/components/GameCreator";
-import Workflow from "@/components/Workflow";
+import HowToUse from "@/components/HowToUse";
+import Troubleshooting from "@/components/Troubleshooting";
 
 export default function Home() {
 	return (
@@ -24,9 +25,11 @@ export default function Home() {
 
 				<Examples />
 
-				<Workflow />
+				<HowToUse />
 
-				<Instructions />
+				<UnderTheHood />
+
+				<Troubleshooting />
 
 				<Footer />
 			</Container>

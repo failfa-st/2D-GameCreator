@@ -1,15 +1,12 @@
-import { SyntheticEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import axios, { AxiosError } from "axios";
-import KeyIcon from "@mui/icons-material/Key";
-import SmartButtonIcon from "@mui/icons-material/SmartButton";
+import { AxiosError } from "axios";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CodeIcon from "@mui/icons-material/Code";
 import CodeOffIcon from "@mui/icons-material/CodeOff";
-import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -36,7 +33,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useHost } from "esdeka/react";
 import CircularProgress from "@mui/material/CircularProgress";
-import CssBaseline from "@mui/material/CssBaseline";
 import Slider from "@mui/material/Slider";
 import { useAtom } from "jotai";
 import Button from "@mui/material/Button";
@@ -61,23 +57,14 @@ import {
 	COMMAND_REMOVE_FEATURE,
 } from "@/constants";
 import { baseGame } from "@/constants/baseGame";
-import { EditTitle } from "@/components/EditTitle";
-import theme, { fontMono } from "@/lib/theme";
+import { fontMono } from "@/lib/theme";
 import { Codesandbox } from "@/components/Codesandbox";
-import { Codepen } from "@/components/Codepen";
-import { InfoMenu } from "@/components/InfoMenu";
-import SimpleSnackbar from "@/components/SimpleSnackbar";
 import ExampleButton from "@/components/base/ExampleButton";
-import { Container, Grid, Link, ListSubheader } from "@mui/material";
+import { Alert, ButtonGroup, ListSubheader } from "@mui/material";
 import Secret from "@/components/base/secret";
-import Footer from "@/components/footer";
-import Title from "@/components/title";
-import { RunCircle } from "@mui/icons-material";
-import Introduction from "@/components/Introduction";
-import Instructions from "@/components/Instructions";
-import Examples from "@/components/Examples";
 import { toOpenAI } from "@/services/api";
 import { createClient } from "@/services/api/openai";
+import { RainbowListItemButton } from "./base/boxes";
 const MonacoEditor = dynamic(import("@monaco-editor/react"), { ssr: false });
 
 export interface ShareProps {
@@ -87,6 +74,8 @@ export interface ShareProps {
 
 export default function GameCreator() {
 	const ref = useRef<HTMLIFrameElement>(null);
+	const abortController = useRef<AbortController | null>(null);
+
 	const [prompt, setPrompt] = useState("");
 	const [template, setTemplate] = useState(prettify(baseGame.default));
 	const [runningId, setRunningId] = useState("1");
@@ -96,7 +85,6 @@ export default function GameCreator() {
 	const [showCode, setShowCode] = useAtom(showCodeAtom);
 	const [loading, setLoading] = useState(false);
 	const [loadingLive, setLoadingLive] = useState(true);
-	const [showError, setShowError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const { mode, systemMode } = useColorScheme();
@@ -150,6 +138,14 @@ export default function GameCreator() {
 		};
 	}, [subscribe, loadingLive]);
 
+	const handleCancel = async () => {
+		if (abortController.current) {
+			abortController.current.abort();
+		}
+		setLoading(false);
+		reload();
+	};
+
 	const sortedAnswers = useMemo(() => {
 		return [...answers].sort((a, b) => {
 			if (a.id === "1") return -1;
@@ -159,14 +155,6 @@ export default function GameCreator() {
 	}, [answers]);
 
 	const current = answers.find(({ id }) => id === activeId);
-
-	const handleSnackbarClose = (event: SyntheticEvent | Event, reason?: string) => {
-		if (reason === "clickaway") {
-			return;
-		}
-
-		setShowError(false);
-	};
 
 	function reload() {
 		connection.current = false;
@@ -186,7 +174,7 @@ export default function GameCreator() {
 						inset: 0,
 						overflow: "hidden",
 						flexDirection: { md: "row" },
-						height: "100vh",
+						height: "90vh",
 					}}
 				>
 					<Stack
@@ -199,8 +187,12 @@ export default function GameCreator() {
 					>
 						<AppBar position="static" elevation={0} color="default">
 							<Toolbar>
-								<Typography variant="h5" component="h2" sx={{ flex: 1, m: 0 }}>
+								<Typography variant="h5" component="h2" sx={{ m: 0 }}>
 									2D GameCreator-GPT
+								</Typography>
+
+								<Typography variant="body2" sx={{ ml: 1, flex: 1 }}>
+									v0.0.1
 								</Typography>
 
 								<IconButton
@@ -212,19 +204,6 @@ export default function GameCreator() {
 								>
 									{showCode ? <CodeOffIcon /> : <CodeIcon />}
 								</IconButton>
-								{/* <IconButton
-									edge="end"
-									color="inherit"
-									aria-label="Clear Prompt"
-									onClick={async () => {
-										setActiveId("1");
-										setRunningId("1");
-										setTemplate(prettify(baseGame.default));
-										reload();
-									}}
-								>
-									<ClearIcon />
-								</IconButton> */}
 							</Toolbar>
 						</AppBar>
 						{showCode && (
@@ -279,6 +258,8 @@ export default function GameCreator() {
 									try {
 										setLoading(true);
 
+										abortController.current = new AbortController();
+
 										const {
 											command,
 											prompt,
@@ -299,17 +280,22 @@ export default function GameCreator() {
 											model: model as string,
 											maxTokens: maxTokens as string,
 											client,
+											signal: abortController.current.signal,
 										});
 
 										setAnswers(previousAnswers => [answer, ...previousAnswers]);
 										setRunningId(answer.id);
 										setActiveId(answer.id);
 										setTemplate(prettify(answer.content));
+										setErrorMessage("");
 										reload();
 									} catch (error) {
-										setShowError(true);
-										setErrorMessage((error as AxiosError).message);
-										console.error(error);
+										if (
+											(error as { message?: string }).message !== "canceled"
+										) {
+											setErrorMessage((error as AxiosError).message);
+											console.error(error);
+										}
 									} finally {
 										setLoading(false);
 									}
@@ -322,13 +308,14 @@ export default function GameCreator() {
 										<TextField
 											multiline
 											fullWidth
+											variant="outlined"
 											required
 											id="prompt"
 											name="prompt"
 											label="Prompt"
 											value={prompt}
 											onChange={e => setPrompt(e.target.value)}
-											minRows={5}
+											minRows={3}
 											InputProps={{
 												style: fontMono.style,
 											}}
@@ -364,35 +351,48 @@ export default function GameCreator() {
 												</Select>
 											</FormControl>
 
-											<Button
-												form="gpt-form"
-												type="submit"
+											<ButtonGroup
 												variant="contained"
 												fullWidth
-												aria-label={loading ? "Loading" : "Run"}
-												aria-disabled={loading}
-												disabled={loading}
-												startIcon={
-													loading ? (
-														<CircularProgress size={20} />
-													) : (
-														<PlayArrowIcon />
-													)
-												}
-												sx={{
-													pl: 5,
-													pr: 5,
-													flexGrow: 1,
-													overflow: "auto",
-												}}
+												sx={{ flexGrow: 1, maxHeight: "96px" }}
 											>
-												<Typography sx={{ fontWeight: "500" }}>
+												<Button
+													form="gpt-form"
+													type="submit"
+													aria-label={loading ? "Loading" : "Run"}
+													aria-disabled={loading}
+													disabled={loading}
+													startIcon={
+														loading ? (
+															<CircularProgress size={20} />
+														) : (
+															<PlayArrowIcon />
+														)
+													}
+													sx={{
+														pl: 5,
+														pr: 5,
+													}}
+												>
 													Run
-												</Typography>
-											</Button>
-											<Box sx={{ flex: 1 }} />
+												</Button>
+												<Button
+													aria-label="Cancel"
+													aria-disabled={!loading}
+													disabled={!loading}
+													onClick={handleCancel}
+													startIcon={<ClearIcon />}
+													color="error"
+													sx={{
+														pl: 0,
+														pr: 0,
+													}}
+												></Button>
+											</ButtonGroup>
 										</Stack>
 									</Stack>
+
+									{errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
 									<Stack direction="row" spacing={1} alignItems="center">
 										<Typography>Examples</Typography>
@@ -585,38 +585,73 @@ export default function GameCreator() {
 												}
 												disablePadding
 											>
-												<ListItemButton
-													dense
-													selected={activeId === answer.id}
-													// disabled={activeId === answer.id}
-													role={undefined}
-													onClick={() => {
-														setActiveId(answer.id);
-														setRunningId(answer.id);
-														setTemplate(prettify(answer.content));
-														reload();
-													}}
-												>
-													<ListItemIcon>
-														{runningId === answer.id ? (
-															<CheckIcon />
-														) : (
-															<VisibilityIcon />
-														)}
-													</ListItemIcon>
-
-													<ListItemText
-														primary={answer.task}
-														primaryTypographyProps={{
-															sx: {
-																overflow: "hidden",
-																textOverflow: "ellipsis",
-																whiteSpace: "nowrap",
-																fontSize: 16,
-															},
+												{activeId === answer.id ? (
+													<RainbowListItemButton
+														dense
+														selected={activeId === answer.id}
+														// disabled={activeId === answer.id}
+														role={undefined}
+														onClick={() => {
+															setActiveId(answer.id);
+															setRunningId(answer.id);
+															setTemplate(prettify(answer.content));
+															reload();
 														}}
-													/>
-												</ListItemButton>
+													>
+														<ListItemIcon>
+															{runningId === answer.id ? (
+																<CheckIcon />
+															) : (
+																<VisibilityIcon />
+															)}
+														</ListItemIcon>
+
+														<ListItemText
+															primary={answer.task}
+															primaryTypographyProps={{
+																sx: {
+																	overflow: "hidden",
+																	textOverflow: "ellipsis",
+																	whiteSpace: "nowrap",
+																	fontSize: 16,
+																},
+															}}
+														/>
+													</RainbowListItemButton>
+												) : (
+													<ListItemButton
+														dense
+														selected={activeId === answer.id}
+														// disabled={activeId === answer.id}
+														role={undefined}
+														onClick={() => {
+															setActiveId(answer.id);
+															setRunningId(answer.id);
+															setTemplate(prettify(answer.content));
+															reload();
+														}}
+													>
+														<ListItemIcon>
+															{runningId === answer.id ? (
+																<CheckIcon />
+															) : (
+																<VisibilityIcon />
+															)}
+														</ListItemIcon>
+
+														<ListItemText
+															primary={answer.task}
+															primaryTypographyProps={{
+																sx: {
+																	overflow: "hidden",
+																	textOverflow: "ellipsis",
+																	whiteSpace: "nowrap",
+																	fontSize: 16,
+																},
+															}}
+														/>
+													</ListItemButton>
+												)}
 											</ListItem>
 										);
 									})}
@@ -697,12 +732,6 @@ export default function GameCreator() {
 					</Stack>
 				</Stack>
 			</Paper>
-
-			<SimpleSnackbar
-				handleClose={handleSnackbarClose}
-				showError={showError}
-				message={errorMessage}
-			/>
 		</>
 	);
 }

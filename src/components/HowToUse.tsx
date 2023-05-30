@@ -1,4 +1,4 @@
-import { PlayArrow, Code, Replay, CropSquare } from "@mui/icons-material";
+import { PlayArrow, Code, Replay, CropSquare, Clear } from "@mui/icons-material";
 import {
 	Button,
 	Grid,
@@ -7,12 +7,24 @@ import {
 	ListItem,
 	ListSubheader,
 	Paper,
+	Stack,
 	Typography,
 } from "@mui/material";
 import { OutlinedBox, SectionBox, RainbowBox } from "@/components/base/boxes";
 import { Key } from "react";
 
 const workflowSteps = [
+	{
+		title: "Editor Usage Tips",
+		steps: [
+			"We are limited by the context-size of the selected model, the scope of the game shouldn't be super huge (for example 'asteroids' is a game with small scope while 'fortnite' is way too big)",
+			"It's good to start with simple features, main mechanics first using the base game + the create game command.",
+			'Iterate on this. For example "Flappy Bird. Intro screen, start the game by pressing space key."',
+			"See if the generated result is what you expect. Continue there, add more features. Either by using the add feature command or by extending the prompt itself and start from scratch (select the base game + create game command).",
+			"Make always sure to check the selected game in the games list, as this is used as the foundation for the next iteration.",
+			"Cancel generating the game at any time by pressing the cancel button button next to run button.",
+		],
+	},
 	{
 		title: "Create a New Game",
 		steps: [
@@ -94,7 +106,7 @@ const workflowSteps = [
 			"Open the Options by clicking on them",
 			"Switch the model between gpt-4 and gpt-3.5-turbo (default)",
 			"Update the max_tokens to 4096 (gpt-4), default is 2048 (gpt-3.5-turbo)",
-			"Make changes to the temperature if you want more random results, default is 0.2",
+			"Make changes to the temperature if you want more random (value closer to 1.0) results, default is 0.2 (not very random)",
 		],
 	},
 ];
@@ -127,6 +139,18 @@ function parseString(string: string) {
 				<Button variant="contained" startIcon={<PlayArrow />} key={index}>
 					<Typography sx={{ fontWeight: "500" }}>Run</Typography>
 				</Button>
+				&nbsp;
+			</>
+		),
+		"cancel button": (item: string, index: Key | null | undefined) => (
+			<>
+				&nbsp;
+				<Button
+					variant="contained"
+					color="error"
+					startIcon={<Clear />}
+					key={index}
+				></Button>
 				&nbsp;
 			</>
 		),
@@ -205,7 +229,7 @@ function parseString(string: string) {
 	});
 }
 
-export default function Workflow() {
+export default function HowToUse() {
 	return (
 		<>
 			<SectionBox>

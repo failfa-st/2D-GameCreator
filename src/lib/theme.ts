@@ -58,6 +58,18 @@ const theme = extendTheme({
 				},
 			},
 		},
+		MuiButton: {
+			styleOverrides: {
+				startIcon: ({ ownerState }) => ({
+					...(ownerState.children
+						? {}
+						: {
+								// if no button label, center icon (e.g mobile)
+								marginRight: 0,
+						  }),
+				}),
+			},
+		},
 	},
 });
 

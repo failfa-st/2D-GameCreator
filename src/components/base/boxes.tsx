@@ -1,8 +1,17 @@
-import { Divider, DividerProps, Paper, PaperProps } from "@mui/material";
+import {
+	Divider,
+	DividerProps,
+	ListItemButton,
+	ListItemButtonProps,
+	Paper,
+	PaperProps,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const SectionBox = styled(Paper)<PaperProps>(({ theme }) => ({
 	display: "flex",
+	flexDirection: "column",
+	gap: 10,
 	padding: 15,
 	paddingTop: 30,
 	paddingBottom: 30,
@@ -21,6 +30,12 @@ export const HighlightBox = styled(Paper)<PaperProps>(({ theme }) => ({
 }));
 
 export const RainbowBox = styled("div")(({ theme }) => ({
+	border: `1px solid transparent`,
+	borderImage: `linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%)`,
+	borderImageSlice: 1,
+}));
+
+export const RainbowListItemButton = styled(ListItemButton)<ListItemButtonProps>(({ theme }) => ({
 	border: `1px solid transparent`,
 	borderImage: `linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%)`,
 	borderImageSlice: 1,

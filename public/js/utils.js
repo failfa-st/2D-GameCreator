@@ -49,7 +49,7 @@ function answer(window_, channel, targetOrigin = "*") {
 }
 
 function handleTemplate(template) {
-	Function("Template", `${template};`)();
+	Function("Template", `${template}`)();
 }
 
 subscribe("2DGameGPT", event => {

@@ -13,7 +13,7 @@ export default function Title() {
 				p: 4,
 			}}
 		>
-			<Typography variant="h1" component="h1">
+			<Typography variant="h1" component="h1" sx={{ fontSize: { xs: "2em", md: "5em" } }}>
 				2D GameCreator-GPT
 			</Typography>
 

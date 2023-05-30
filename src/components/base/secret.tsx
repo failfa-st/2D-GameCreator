@@ -10,7 +10,7 @@ export default function Secret(props: TextFieldProps) {
 
 	return (
 		<TextField
-			variant="filled"
+			variant="outlined"
 			label={label}
 			name={name}
 			type={showSecret ? "text" : "password"}

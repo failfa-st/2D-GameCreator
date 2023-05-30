@@ -137,6 +137,45 @@ export default function GameCreator() {
 		};
 	}, [subscribe, loadingLive]);
 
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData(event.target as HTMLFormElement);
+		const formObject = Object.fromEntries(formData);
+		try {
+			setLoading(true);
+
+			abortController.current = new AbortController();
+
+			const { command, prompt, temperature, template, model, maxTokens } = formObject;
+
+			const client = createClient(formObject.openAIAPIKey as string);
+			const answer = await toOpenAI({
+				command: command as string,
+				prompt: prompt as string,
+				temperature: temperature as string,
+				template: template as string,
+				model: model as string,
+				maxTokens: maxTokens as string,
+				client,
+				signal: abortController.current.signal,
+			});
+
+			setAnswers(previousAnswers => [answer, ...previousAnswers]);
+			setRunningId(answer.id);
+			setActiveId(answer.id);
+			setTemplate(prettify(answer.content));
+			setErrorMessage("");
+			reload();
+		} catch (error) {
+			if ((error as { message?: string }).message !== "canceled") {
+				setErrorMessage((error as AxiosError).message);
+				console.error(error);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const handleCancel = async () => {
 		if (abortController.current) {
 			abortController.current.abort();
@@ -186,13 +225,15 @@ export default function GameCreator() {
 					>
 						<AppBar position="static" elevation={0} color="default">
 							<Toolbar>
-								<Typography variant="h5" component="h2" sx={{ m: 0 }}>
-									2D GameCreator
-								</Typography>
+								<Stack sx={{ alignItems: "baseline", flex: 1 }} direction="row">
+									<Typography variant="h5" component="h2" sx={{ m: 0 }}>
+										2D GameCreator
+									</Typography>
 
-								<Typography variant="body2" sx={{ ml: 1, flex: 1 }}>
-									v0.0.1
-								</Typography>
+									<Typography variant="body2" sx={{ ml: 1 }}>
+										v1.0.0
+									</Typography>
+								</Stack>
 
 								<IconButton
 									color="inherit"
@@ -250,64 +291,16 @@ export default function GameCreator() {
 								component="form"
 								id="gpt-form"
 								sx={{ p: 0, pt: 0 }}
-								onSubmit={async event => {
-									event.preventDefault();
-									const formData = new FormData(event.target as HTMLFormElement);
-									const formObject = Object.fromEntries(formData);
-									try {
-										setLoading(true);
-
-										abortController.current = new AbortController();
-
-										const {
-											command,
-											prompt,
-											temperature,
-											template,
-											model,
-											maxTokens,
-										} = formObject;
-
-										const client = createClient(
-											formObject.openAIAPIKey as string
-										);
-										const answer = await toOpenAI({
-											command: command as string,
-											prompt: prompt as string,
-											temperature: temperature as string,
-											template: template as string,
-											model: model as string,
-											maxTokens: maxTokens as string,
-											client,
-											signal: abortController.current.signal,
-										});
-
-										setAnswers(previousAnswers => [answer, ...previousAnswers]);
-										setRunningId(answer.id);
-										setActiveId(answer.id);
-										setTemplate(prettify(answer.content));
-										setErrorMessage("");
-										reload();
-									} catch (error) {
-										if (
-											(error as { message?: string }).message !== "canceled"
-										) {
-											setErrorMessage((error as AxiosError).message);
-											console.error(error);
-										}
-									} finally {
-										setLoading(false);
-									}
-								}}
+								onSubmit={handleSubmit}
 							>
-								<Stack sx={{ p: 1, pl: 0, gap: 2 }}>
+								<Stack sx={{ p: 1, pl: 0, gap: 1 }}>
 									<Secret label="OpenAI API Key" name="openAIAPIKey" />
 
 									<Stack direction="row" spacing={1}>
 										<TextField
 											multiline
 											fullWidth
-											variant="outlined"
+											variant="filled"
 											required
 											id="prompt"
 											name="prompt"
@@ -524,7 +517,10 @@ export default function GameCreator() {
 								</Stack>
 							</Box>
 
-							<Paper variant="elevation" sx={{ p: 1, pl: 0, overflow: "auto" }}>
+							<Paper
+								variant="elevation"
+								sx={{ p: 1, pl: 0, pt: 0, overflow: "auto" }}
+							>
 								<List sx={{ flex: 1, p: 0 }}>
 									<ListSubheader
 										sx={{

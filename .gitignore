@@ -119,3 +119,6 @@ training
 
 # project files
 project/src/index.js
+
+
+.DS_Store

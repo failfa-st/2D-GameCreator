@@ -1,7 +1,7 @@
 {
-  "name": "2d-gamecreator-gpt",
-  "version": "1.0.0",
-  "description": "Create 2D games in JavaScript using Prompt Driven Development",
+  "name": "2d-gamecreator",
+  "version": "0.0.1",
+  "description": "text-to-game using OpenAI GPT 3.5 / GPT 4",
   "keywords": [
     "ai",
     "artificial intelligence",
@@ -9,17 +9,19 @@
     "gpt",
     "gpt-4",
     "gpt-35-turbo",
-    "web-ui"
+    "web-ui",
+    "game development",
+    "prototyping"
   ],
   "license": "AGPL",
   "author": {
-    "name": "Gregor Adams",
-    "url": "https://github.com/pixelass/"
+    "name": "Tim Pietrusky",
+    "url": "https://github.com/TimPietrusky/"
   },
   "contributors": [
     {
-      "name": "Tim Pietrusky",
-      "url": "https://github.com/TimPietrusky"
+      "name": "Gregor Adams",
+      "url": "https://github.com/pixelass"
     }
   ],
   "scripts": {

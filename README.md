@@ -1,5 +1,5 @@
 ---
-title: 2D GameCreator-GPT
+title: 2D GameCreator
 emoji: "\U0001F47E\U0001F579\U0001F4FA"
 colorFrom: purple
 colorTo: red
@@ -8,7 +8,7 @@ pinned: false
 license: agpl-3.0
 app_port: 3000
 ---
-<h1 align="center"><big>2D GameCreator-GPT</big></h1>
+<h1 align="center"><big>2D GameCreator</big></h1>
 
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
 
@@ -54,7 +54,7 @@ hosted demo on 🤗 Spaces or run it directly on your computer.
 
 ### On 🤗 Spaces
 
-[The **2D GameCreator-GPT** is hosted on Hugging Face Spaces](https://huggingface.co/spaces/failfast/2D-GameCreator-GPT/)
+[The **2D GameCreator** is hosted on Hugging Face Spaces](https://huggingface.co/spaces/failfast/2D-GameCreator/)
 
 ### On your computer
 

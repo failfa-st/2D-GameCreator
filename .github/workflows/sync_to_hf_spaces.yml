@@ -6,7 +6,7 @@ on:
 
 env:
   HF_USERNAME: failfast
-  HF_SPACE_NAME: 2D-GameCreator-GPT
+  HF_SPACE_NAME: 2D-GameCreator
 
 jobs:
   sync-to-space:

@@ -187,7 +187,7 @@ export default function GameCreator() {
 						<AppBar position="static" elevation={0} color="default">
 							<Toolbar>
 								<Typography variant="h5" component="h2" sx={{ m: 0 }}>
-									2D GameCreator-GPT
+									2D GameCreator
 								</Typography>
 
 								<Typography variant="body2" sx={{ ml: 1, flex: 1 }}>

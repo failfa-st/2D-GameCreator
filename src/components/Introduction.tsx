@@ -31,7 +31,7 @@ export default function Introduction() {
 						<Typography>
 							You are stuck?{" "}
 							<Link
-								href="https://huggingface.co/spaces/failfast/2D-GameCreator-GPT/discussions"
+								href="https://huggingface.co/spaces/failfast/2D-GameCreator/discussions"
 								target="_blank"
 								rel="noopener"
 							>

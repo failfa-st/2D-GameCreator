@@ -35,11 +35,11 @@ export default function UnderTheHood() {
 							</Link>
 							. The full source code can be found on{" "}
 							<Link
-								href="https://github.com/failfa-st/2D-GameCreator-GPT"
+								href="https://github.com/failfa-st/2D-GameCreator"
 								target="_blank"
 								rel="noopener"
 							>
-								failfa-st/2D-GameCreator-GPT.
+								failfa-st/2D-GameCreator.
 							</Link>
 						</ListItemText>
 					</ListItem>

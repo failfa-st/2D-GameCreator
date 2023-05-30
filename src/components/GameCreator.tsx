@@ -80,7 +80,6 @@ export default function GameCreator() {
 	const [template, setTemplate] = useState(prettify(baseGame.default));
 	const [runningId, setRunningId] = useState("1");
 	const [activeId, setActiveId] = useState("1");
-	const [editingId, setEditingId] = useState<string | null>(null);
 	const [answers, setAnswers] = useAtom(answersAtom);
 	const [showCode, setShowCode] = useAtom(showCodeAtom);
 	const [loading, setLoading] = useState(false);
@@ -174,7 +173,7 @@ export default function GameCreator() {
 						inset: 0,
 						overflow: "hidden",
 						flexDirection: { md: "row" },
-						height: "90vh",
+						height: "95vh",
 					}}
 				>
 					<Stack

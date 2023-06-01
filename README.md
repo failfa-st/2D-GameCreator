@@ -10,6 +10,8 @@ app_port: 3000
 ---
 <h1 align="center"><big>2D GameCreator</big></h1>
 
+[LIVE DEMO on HuggingFace](https://huggingface.co/spaces/failfast/2D-GameCreator)
+
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
 
 ---

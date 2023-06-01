@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import CheckIcon from "@mui/icons-material/Check";
@@ -65,6 +65,7 @@ import Secret from "@/components/base/secret";
 import { toOpenAI } from "@/services/api";
 import { createClient } from "@/services/api/openai";
 import { RainbowListItemButton } from "./base/boxes";
+import { CustomAxiosError } from "@/services/api/axios";
 const MonacoEditor = dynamic(import("@monaco-editor/react"), { ssr: false });
 
 export interface ShareProps {
@@ -88,7 +89,7 @@ export default function GameCreator() {
 
 	const { mode, systemMode } = useColorScheme();
 
-	const { call, subscribe } = useHost(ref, "2DGameGPT");
+	const { call, subscribe } = useHost(ref, "2DGameCreator");
 
 	const connection = useRef(false);
 	const [tries, setTries] = useState(1);
@@ -167,9 +168,60 @@ export default function GameCreator() {
 			setErrorMessage("");
 			reload();
 		} catch (error) {
+			const err = error as CustomAxiosError;
+			console.error(err);
+
+			let errorMessage = "";
+
+			// If error is not canceled (from AbortController)
+			if (err.message !== "canceled") {
+				// If we have an error message from the data.error.message, use that
+				if (err.data?.error?.message && err.data.error.message !== "") {
+					errorMessage = err.data.error.message;
+				}
+				// If there's no message but there's a code, use the code
+				else if (err.data?.error?.code) {
+					errorMessage = err.data.error.code;
+				}
+				// If there's neither a message nor a code, use the error's own message
+				else if (err.message) {
+					errorMessage = err.message;
+				} else {
+					errorMessage = "UNKNOWN_ERROR";
+				}
+			}
+
+			setErrorMessage(errorMessage);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleSubmitServer = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData(event.target as HTMLFormElement);
+		const formObject = Object.fromEntries(formData);
+		try {
+			setLoading(true);
+
+			abortController.current = new AbortController();
+
+			const { data } = await axios.post("/api/generate", formObject, {
+				signal: abortController.current.signal,
+			});
+			const answer = data;
+
+			setAnswers(previousAnswers => [answer, ...previousAnswers]);
+			setRunningId(answer.id);
+			setActiveId(answer.id);
+			setTemplate(prettify(answer.content));
+			setErrorMessage("");
+			reload();
+		} catch (error) {
 			if ((error as { message?: string }).message !== "canceled") {
-				setErrorMessage((error as AxiosError).message);
-				console.error(error);
+				const err = error as AxiosError;
+				console.error(err);
+				setErrorMessage(err.response?.data?.message ?? err.message);
 			}
 		} finally {
 			setLoading(false);
@@ -212,7 +264,9 @@ export default function GameCreator() {
 						inset: 0,
 						overflow: "hidden",
 						flexDirection: { md: "row" },
-						height: "95vh",
+						height: {
+							md: "95vh",
+						},
 					}}
 				>
 					<Stack
@@ -231,7 +285,7 @@ export default function GameCreator() {
 									</Typography>
 
 									<Typography variant="body2" sx={{ ml: 1 }}>
-										v1.0.0
+										{process.env.NEXT_PUBLIC_VERSION}
 									</Typography>
 								</Stack>
 
@@ -296,7 +350,7 @@ export default function GameCreator() {
 								<Stack sx={{ p: 1, pl: 0, gap: 1 }}>
 									<Secret label="OpenAI API Key" name="openAIAPIKey" />
 
-									<Stack direction="row" spacing={1}>
+									<Stack direction="column" spacing={1}>
 										<TextField
 											multiline
 											fullWidth
@@ -313,8 +367,12 @@ export default function GameCreator() {
 											}}
 										/>
 
-										<Stack spacing={1}>
-											<FormControl variant="outlined" sx={{ minWidth: 180 }}>
+										<Stack
+											spacing={1}
+											direction="row"
+											sx={{ justifyContent: "end" }}
+										>
+											<FormControl variant="outlined" sx={{ minWidth: 200 }}>
 												<InputLabel id="gpt-command-select-label">
 													Command
 												</InputLabel>
@@ -345,8 +403,7 @@ export default function GameCreator() {
 
 											<ButtonGroup
 												variant="contained"
-												fullWidth
-												sx={{ flexGrow: 1, maxHeight: "96px" }}
+												sx={{ maxHeight: "96px" }}
 											>
 												<Button
 													form="gpt-form"
@@ -386,45 +443,6 @@ export default function GameCreator() {
 
 									{errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-									<Stack direction="row" spacing={1} alignItems="center">
-										<Typography>Examples</Typography>
-
-										<ExampleButton
-											title={"Space Invaders"}
-											text={
-												"Space Invaders. Single player ship at the bottom, a row of invaders at the top moving side-to-side and descending. The player ship can move left and right, and shoot bullets to destroy the invaders. Handle game over scenario when an invader reaches the player's level or all invaders are dead. Collision detection for both invaders and player. "
-											}
-											onClick={setPrompt}
-										/>
-
-										<ExampleButton
-											title="Jump & Run"
-											text={
-												"Jump & Run. Player collects coins to enter the next level. Various platform heights. Gras platform covers the whole ground. Space key for jumping, arrow keys for movement."
-											}
-											onClick={setPrompt}
-										/>
-
-										<ExampleButton
-											title="Flappy Bird"
-											text={
-												"Flappy Bird. Intro screen, start the game by pressing space key. Bird starts flying on the left center of the screen. Gradually falls slowly. Pressing the space key over and over lets the bird fly higher. Pipes move from the right of the screen to the left. The pipes have a huge opening so that the bird can easily fly through. Collision detection when the bird hits the ground or a pipe. When collision detected, then show intro screen. Player gets a point for each passed pipe without an collision. Score is shown in the top left while bird is flying. High score on intro screen."
-											}
-											onClick={setPrompt}
-										/>
-
-										<ExampleButton
-											title="Asteroids"
-											text={
-												"Asteroids. Control spaceship-movement using arrow keys. Fire bullets with space key to destroy asteroids, breaking them into smaller pieces. Earn points for destroying asteroids, with higher scores for smaller ones. Collision detection when spaceship hits asteroid, collision reduces spaceship health, game over when health is 0."
-											}
-											// text={
-											// 	"Asteroids. Space ship can fly around in space using the arrow keys. Irregular shaped objects called asteroids flying around the space ship. The space ship can shoot bullets using the space key. When a bullet hits an asteroid, it splits in smaller irregular shaped objects; when asteroid is completely destroyed, the player scores one point. When the space ship collides with an asteroid, it looses 1 health; when the health is 0, the game is over. Restart the game via pressing space key."
-											// }
-											onClick={setPrompt}
-										/>
-									</Stack>
-
 									<Paper variant="outlined">
 										<Accordion disableGutters square elevation={0}>
 											<AccordionSummary
@@ -439,29 +457,27 @@ export default function GameCreator() {
 												<Typography>Options</Typography>
 											</AccordionSummary>
 											<AccordionDetails>
-												<Stack gap={2}>
-													<FormControl
-														fullWidth
-														variant="outlined"
-														sx={{ mb: 3 }}
+												<FormControl
+													fullWidth
+													variant="outlined"
+													sx={{ mb: 3 }}
+												>
+													<InputLabel id="gpt-model-select-label">
+														Model
+													</InputLabel>
+													<Select
+														labelId="gpt-model-select-label"
+														id="gpt-model-select"
+														name="model"
+														defaultValue="gpt-3.5-turbo"
+														label="Model"
 													>
-														<InputLabel id="gpt-model-select-label">
-															Model
-														</InputLabel>
-														<Select
-															labelId="gpt-model-select-label"
-															id="gpt-model-select"
-															name="model"
-															defaultValue="gpt-3.5-turbo"
-															label="Model"
-														>
-															<MenuItem value="gpt-3.5-turbo">
-																GPT 3.5 turbo
-															</MenuItem>
-															<MenuItem value="gpt-4">GPT 4</MenuItem>
-														</Select>
-													</FormControl>
-												</Stack>
+														<MenuItem value="gpt-3.5-turbo">
+															GPT 3.5 turbo
+														</MenuItem>
+														<MenuItem value="gpt-4">GPT 4</MenuItem>
+													</Select>
+												</FormControl>
 												<Stack
 													spacing={2}
 													direction="row"
@@ -514,6 +530,45 @@ export default function GameCreator() {
 											</AccordionDetails>
 										</Accordion>
 									</Paper>
+
+									<Stack direction="row" spacing={1} alignItems="center">
+										<Typography>Examples</Typography>
+
+										<ExampleButton
+											title={"Space Invaders"}
+											text={
+												"Space Invaders. Single player ship at the bottom, a row of invaders at the top moving side-to-side and descending. The player ship can move left and right, and shoot bullets to destroy the invaders. Handle game over scenario when an invader reaches the player's level or all invaders are dead. Collision detection for both invaders and player. "
+											}
+											onClick={setPrompt}
+										/>
+
+										{/* <ExampleButton
+											title="Jump & Run"
+											text={
+												"Jump & Run. Player collects coins to enter the next level. Various platform heights. Gras platform covers the whole ground. Space key for jumping, arrow keys for movement."
+											}
+											onClick={setPrompt}
+										/> */}
+
+										<ExampleButton
+											title="Flappy Bird"
+											text={
+												"Flappy Bird. Intro screen, start the game by pressing space key. Bird starts flying on the left center of the screen. Gradually falls slowly. Pressing the space key over and over lets the bird fly higher. Pipes move from the right of the screen to the left. The pipes have a huge opening so that the bird can easily fly through. Collision detection when the bird hits the ground or a pipe. When collision detected, then show intro screen. Player gets a point for each passed pipe without an collision. Score is shown in the top left while bird is flying. High score on intro screen."
+											}
+											onClick={setPrompt}
+										/>
+
+										<ExampleButton
+											title="Asteroids"
+											text={
+												"Asteroids. Control spaceship-movement using arrow keys. Fire bullets with space key to destroy asteroids, breaking them into smaller pieces. Earn points for destroying asteroids, with higher scores for smaller ones. Collision detection when spaceship hits asteroid, collision reduces spaceship health, game over when health is 0."
+											}
+											// text={
+											// 	"Asteroids. Space ship can fly around in space using the arrow keys. Irregular shaped objects called asteroids flying around the space ship. The space ship can shoot bullets using the space key. When a bullet hits an asteroid, it splits in smaller irregular shaped objects; when asteroid is completely destroyed, the player scores one point. When the space ship collides with an asteroid, it looses 1 health; when the health is 0, the game is over. Restart the game via pressing space key."
+											// }
+											onClick={setPrompt}
+										/>
+									</Stack>
 								</Stack>
 							</Box>
 

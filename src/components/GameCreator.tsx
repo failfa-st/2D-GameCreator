@@ -31,7 +31,7 @@ import Toolbar from "@mui/material/Toolbar";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { useHost } from "esdeka/react";
+import { useHost } from "esdeka-node18/react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Slider from "@mui/material/Slider";
 import { useAtom } from "jotai";

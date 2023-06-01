@@ -126,6 +126,8 @@ function createGameLoop(callback) {
     return gameLoop;
 }
 
+window.createGameLoop = createGameLoop;
+
 
 /**
  * Generated 2D game

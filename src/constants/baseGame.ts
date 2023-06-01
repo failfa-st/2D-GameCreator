@@ -7,7 +7,7 @@ function draw(delta) {
 	// TODO: Add drawing logic here
 }
 
-// NEVER stop the gameloop
-requestAnimationFrame(createGameLoop(draw));
+// DO NOT CHANGE THE FOLLOWING LINE
+requestAnimationFrame(window.createGameLoop(draw));
 `.trim(),
 };

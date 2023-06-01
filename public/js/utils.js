@@ -29,6 +29,8 @@ function createGameLoop(callback) {
     return gameLoop;
 }
 
+window.createGameLoop = createGameLoop;
+
 function downloadCanvasImage() {
     // Get the canvas element
     const canvas = document.getElementById('canvas');
@@ -46,14 +48,12 @@ function downloadCanvasImage() {
     link.click();
 }
 
-
 const clients = {
 	host: "__ESDEKA::host__",
 	guest: "__ESDEKA::guest__",
 };
 
 // Shared communicators
-
 function subscribe(channel, callback) {
 	function handleMessage(event) {
 		if (

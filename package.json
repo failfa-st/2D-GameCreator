@@ -29,7 +29,7 @@
     "dev": "next dev",
     "postinstall": "npm run write-version",
     "prepare": "husky install",
-    "write-version": "echo 'NEXT_PUBLIC_VERSION=$(node -p \"require('./package.json').version\")' >> .env"
+    "write-version": "node scripts/write-version.js"
   },
   "lint-staged": {
     "*.{ts,tsx,jsx}": [

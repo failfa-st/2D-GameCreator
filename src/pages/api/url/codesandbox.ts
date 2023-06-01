@@ -34,6 +34,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
 				}),
 				isBinary: false,
 			},
+			"package.json": {
+				content: { dependencies: {} },
+			},
 		},
 	});
 

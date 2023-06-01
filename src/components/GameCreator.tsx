@@ -197,36 +197,36 @@ export default function GameCreator() {
 		}
 	};
 
-	const handleSubmitServer = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const formData = new FormData(event.target as HTMLFormElement);
-		const formObject = Object.fromEntries(formData);
-		try {
-			setLoading(true);
+	// const handleSubmitServer = async (event: React.FormEvent<HTMLFormElement>) => {
+	// 	event.preventDefault();
+	// 	const formData = new FormData(event.target as HTMLFormElement);
+	// 	const formObject = Object.fromEntries(formData);
+	// 	try {
+	// 		setLoading(true);
 
-			abortController.current = new AbortController();
+	// 		abortController.current = new AbortController();
 
-			const { data } = await axios.post("/api/generate", formObject, {
-				signal: abortController.current.signal,
-			});
-			const answer = data;
+	// 		const { data } = await axios.post("/api/generate", formObject, {
+	// 			signal: abortController.current.signal,
+	// 		});
+	// 		const answer = data;
 
-			setAnswers(previousAnswers => [answer, ...previousAnswers]);
-			setRunningId(answer.id);
-			setActiveId(answer.id);
-			setTemplate(prettify(answer.content));
-			setErrorMessage("");
-			reload();
-		} catch (error) {
-			if ((error as { message?: string }).message !== "canceled") {
-				const err = error as AxiosError;
-				console.error(err);
-				setErrorMessage(err.response?.data?.message ?? err.message);
-			}
-		} finally {
-			setLoading(false);
-		}
-	};
+	// 		setAnswers(previousAnswers => [answer, ...previousAnswers]);
+	// 		setRunningId(answer.id);
+	// 		setActiveId(answer.id);
+	// 		setTemplate(prettify(answer.content));
+	// 		setErrorMessage("");
+	// 		reload();
+	// 	} catch (error) {
+	// 		if ((error as { message?: string }).message !== "canceled") {
+	// 			const err = error as AxiosError;
+	// 			console.error(err);
+	// 			setErrorMessage(err.response?.data?.message ?? err.message);
+	// 		}
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	const handleCancel = async () => {
 		if (abortController.current) {

@@ -8,11 +8,11 @@ export const answersAtom = atomWithStorage<
 		content: string;
 		task: string;
 	}[]
->("2DGameGPT", [
+>("2DGameCreator", [
 	{
 		id: "1",
 		content: baseGame.default,
 		task: "Base Game",
 	},
 ]);
-export const showCodeAtom = atomWithStorage("2DGameGPT-editor", false);
+export const showCodeAtom = atomWithStorage("2DGameCreator-editor", false);

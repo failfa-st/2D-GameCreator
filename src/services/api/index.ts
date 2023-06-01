@@ -2,6 +2,26 @@ import { ChatCompletionRequestMessage, OpenAIApi } from "openai";
 import { nanoid } from "nanoid";
 import { extractCode, miniPrompt } from "@/utils/prompt";
 import { systemMessage } from "@/constants";
+import { OpenAIError } from "./openai";
+import { minify } from "terser";
+
+const minifyConfig = {
+	compress: {
+		dead_code: true,
+		drop_console: true,
+		drop_debugger: true,
+		keep_classnames: false,
+		keep_fargs: true,
+		keep_fnames: false,
+		keep_infinity: false,
+	},
+	mangle: false,
+	module: false,
+	sourceMap: false,
+	output: {
+		comments: true,
+	},
+};
 
 interface ToOpenAIProps {
 	command: string;
@@ -22,7 +42,7 @@ export async function toOpenAI({
 	model = "gpt-3.5-turbo",
 	maxTokens = "2048",
 	client = null,
-	signal,
+	signal = new AbortController().signal,
 }: ToOpenAIProps) {
 	if (client === null) {
 		throw new Error("OpenAI client is not defined");
@@ -30,13 +50,16 @@ export async function toOpenAI({
 
 	const prompt_ = prompt.trim();
 
+	const minifiedCode = await minify(template, minifyConfig);
+
+	// 		// ${template.trim().replace(/^\s+/gm, "").replace(/^\n+/g, "").replace(/\s+/, " ")}
 	const nextMessage: ChatCompletionRequestMessage = {
 		role: "user",
 		content: miniPrompt`
 			"${command}": ${prompt_}. Return the full source code of the game.
 			TEMPLATE:
 			\`\`\`javascript
-			${template.trim().replace(/^\s+/gm, "").replace(/^\n+/g, "").replace(/\s+/, " ")}
+			${minifiedCode.code}
 			\`\`\`
 			`,
 	};
@@ -84,6 +107,12 @@ export async function toOpenAI({
 			id: nanoid(),
 		};
 	} catch (error) {
-		throw error;
+		const err = error as OpenAIError;
+
+		if (err.response) {
+			throw err.response;
+		} else {
+			throw error;
+		}
 	}
 }

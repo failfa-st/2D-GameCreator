@@ -1,6 +1,6 @@
 {
   "name": "2d-gamecreator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "text-to-game using OpenAI GPT 3.5 / GPT 4",
   "keywords": [
     "ai",

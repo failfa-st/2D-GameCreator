@@ -34,7 +34,7 @@ export default function Title() {
 				</Link>
 
 				<Button
-					href="https://github.com/failfa-st/nextjs-docker-starter"
+					href="https://github.com/failfa-st/2D-GameCreator"
 					target="_blank"
 					rel="noopener"
 				>

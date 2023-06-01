@@ -27,7 +27,6 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "postinstall": "npm run write-version",
     "prepare": "husky install",
     "write-version": "node src/scripts/write-version.js"
   },

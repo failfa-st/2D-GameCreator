@@ -23,20 +23,15 @@ export default function Introduction() {
 				<Grid item md={4}>
 					<Stack spacing={2}>
 						<Typography>
-							You provide a prompt that describes the game you want, so that your
-							skilled 2D Game Developer can built it for you. The game runs directly
-							in your browser (thanks to JavaScript on Canvas2D).
+							Provide a prompt detailing your desired game, and our 2D Game Developer
+							will build it. The game operates directly in your browser via JavaScript
+							on Canvas2D.
 						</Typography>
 
 						<Typography>
-							You are stuck?{" "}
-							<Link
-								href="https://huggingface.co/spaces/failfast/2D-GameCreator/discussions"
-								target="_blank"
-								rel="noopener"
-							>
-								We are here to help!
-							</Link>
+							This demo is ideal for crafting simple games and rapid prototyping.
+							However, due to the limited context size and single-request design,
+							there are constraints on the code volume.
 						</Typography>
 
 						<Typography>
@@ -53,47 +48,60 @@ export default function Introduction() {
 					</Stack>
 				</Grid>
 				<Grid item md={4}>
-					<Paper>
-						<List disablePadding>
-							<ListSubheader>Quickstart</ListSubheader>
-							<ListItem>
-								<ListItemIcon>
-									<KeyIcon />
-								</ListItemIcon>
-								<ListItemText>
-									{" "}
-									Add your&nbsp;
-									<Link
-										href="https://platform.openai.com/account/api-keys"
-										target="_blank"
-										rel="noopener"
-									>
-										OpenAI API key
-									</Link>
-								</ListItemText>
-							</ListItem>
-							<ListItem>
-								<ListItemIcon>
-									<SmartButtonIcon />
-								</ListItemIcon>
-								<ListItemText>
-									Select one of the <b>Examples</b>
-								</ListItemText>
-							</ListItem>
-							<ListItem>
-								<ListItemIcon>
-									<PlayArrowIcon />
-								</ListItemIcon>
-								<ListItemText>
-									Click on &nbsp;
-									<Button variant="contained" startIcon={<PlayArrow />}>
-										<Typography sx={{ fontWeight: "500" }}>Run</Typography>
-									</Button>
-									&nbsp;
-								</ListItemText>
-							</ListItem>
-						</List>
-					</Paper>
+					<Stack spacing={2}>
+						<Paper>
+							<List disablePadding>
+								<ListSubheader>Quickstart</ListSubheader>
+								<ListItem>
+									<ListItemIcon>
+										<KeyIcon />
+									</ListItemIcon>
+									<ListItemText>
+										{" "}
+										Add your&nbsp;
+										<Link
+											href="https://platform.openai.com/account/api-keys"
+											target="_blank"
+											rel="noopener"
+										>
+											OpenAI API key
+										</Link>
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemIcon>
+										<SmartButtonIcon />
+									</ListItemIcon>
+									<ListItemText>
+										Select one of the <b>Examples</b>
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemIcon>
+										<PlayArrowIcon />
+									</ListItemIcon>
+									<ListItemText>
+										Click on &nbsp;
+										<Button variant="contained" startIcon={<PlayArrow />}>
+											<Typography sx={{ fontWeight: "500" }}>Run</Typography>
+										</Button>
+										&nbsp;
+									</ListItemText>
+								</ListItem>
+							</List>
+						</Paper>
+
+						<Typography>
+							You are stuck?{" "}
+							<Link
+								href="https://huggingface.co/spaces/failfast/2D-GameCreator/discussions"
+								target="_blank"
+								rel="noopener"
+							>
+								We are here to help!
+							</Link>
+						</Typography>
+					</Stack>
 				</Grid>
 			</Grid>
 		</Stack>

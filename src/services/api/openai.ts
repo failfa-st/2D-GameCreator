@@ -8,3 +8,13 @@ export const createClient = (apiKey: string): OpenAIApi => {
 
 	return new OpenAIApi(configuration);
 };
+
+export interface OpenAIError extends Error {
+	response?: {
+		data?: {
+			error?: {
+				message: string;
+			};
+		};
+	};
+}

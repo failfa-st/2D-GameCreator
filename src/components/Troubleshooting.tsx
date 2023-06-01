@@ -27,6 +27,18 @@ export default function Troubleshooting() {
 			<DividerBox />
 
 			<Paper sx={{ p: 1 }}>
+				<Alert severity="error" sx={{ fontSize: "1.25rem", mb: 1 }}>
+					Network Error
+				</Alert>
+
+				<Typography variant="body1">
+					There might have been a timeout or something else. Please try again.
+				</Typography>
+			</Paper>
+
+			<DividerBox />
+
+			<Paper sx={{ p: 1 }}>
 				<Typography>
 					You need help? Something is not working?{" "}
 					<Link
